@@ -1,3 +1,4 @@
+// Alteração de tabs de acordo com clique em botão
 $('[data-group]').each(function(){
 	var $allTarget = $(this).find('[data-target]'),
 			$allClick = $(this).find('[data-click]'),
@@ -20,6 +21,7 @@ $('[data-group]').each(function(){
 	});
 });
 
+// Deslizamento suave na página ao clicar em qualquer menu principal
 $('.menu-nav a[href^="#"]').click(function(e){
 	e.preventDefault();
 	var id = $(this).attr('href'),
@@ -30,6 +32,7 @@ $('.menu-nav a[href^="#"]').click(function(e){
 	}, 500);
 });
 
+// Deslizamento suave para o topo mediante clique no logotipo do projeto
 $('.logo').click(function(e){
 	e.preventDefault();
 	$('html, body').animate({
@@ -37,6 +40,7 @@ $('.logo').click(function(e){
 	}, 500)
 });
 
+// Destaque para menu de acordo com a área na qual a página se encontra
 $('section').each(function(){
 	var height = $(this).height(),
 			offsetTop = $(this).offset().top,
@@ -54,24 +58,39 @@ $('section').each(function(){
 	});
 });
 
-
+// Botão mobile
 $('.mobile-btn').click(function(){
 	$(this).toggleClass('active');
 	$('.mobile-menu').toggleClass('active');
 });
 
-$(".slide > :first").addClass("active");
+// Slider
 
-function rotateSlide() {
-	var activeSlide = $(".slide > .active"),
-		nextSlide = activeSlide.next();
+function slider(sliderName, velocity) {
+	var sliderClass = "." + sliderName,
+		activeClass = "active",
+		rotate = setInterval(rotateSlide, velocity);
+
+	$(sliderClass + " > :first").addClass(activeClass);
+
+	$(sliderClass).hover(function() {
+		clearInterval(rotate);
+	}, function() {
+		rotate = setInterval(rotateSlide, velocity);
+	});
+
+	function rotateSlide() {
+		var activeSlide = $(sliderClass + " > ." + activeClass),
+			nextSlide = activeSlide.next();
 	
-	if(nextSlide.length == 0) {
-		nextSlide = $(".slide > :first");
+		if(nextSlide.length == 0) {
+			nextSlide = $(sliderClass + " > :first");
+		}
+
+		activeSlide.removeClass(activeClass);
+		nextSlide.addClass(activeClass);
 	}
 
-	activeSlide.removeClass("active");
-	nextSlide.addClass("active");
 }
 
-setInterval(rotateSlide, 2000);
+slider("introducao", 2000);
